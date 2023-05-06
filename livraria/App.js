@@ -17,7 +17,8 @@ export default function App() {
   const [editora, setEditora] = useState('')
   const [preco,setPreco ] = useState('')
   const [tipo, setTipo] = useState('')
-  const [lista, setLista] = useState('')
+  const [tipoTerro, setTipoTerror] = useState([])
+  const [tipoAventira, setTipoAventura] = useState([])
 
   
 
@@ -94,7 +95,11 @@ export default function App() {
             <View style={{ backgroundColor: "brown", width: '49%' }}>
               <Text onPress={()=>{
                 const obj = {tituloAutor, nomeAutor, editora, preco, tipo}
-                setLista([...lista, obj])
+                if(tipo ==  '1'){
+                  setTipoTerror([...tipoTerro, obj])
+                }else{
+                  setTipoAventura([...tipoAventira, obj])
+                }
 
               }}  style={{textAlign: 'center'}} >Salvar</Text>
             </View>
@@ -103,18 +108,23 @@ export default function App() {
         <View style={{ flex: 2, backgroundColor: 'white' }}>
           <SectionList 
           sections={[
-          {title: 'Terror', data: ()=>{if(tipo == 'terror'){return lista}},
-           title: 'aventura', data: ()=>{if(tipo == 'aventura'){return lista}}}
+            {title: "livro de terro", data : tipoTerro},
+            {title: 'livro de aventura', data : tipoAventira}
           ]}
           renderSectionFooter={({section})=>(
             <View>
-              <Text>{section.data}</Text>
               <Text>{section.title}</Text>
             </View>
             
           )}
           renderItem={({item})=>(
-            <Text>{item.tipo}</Text>
+            <View>
+              <Text>{item.tituloAutor}</Text>
+              <Text>{item.nomeAutor}</Text>
+              <Text>{item.editora}</Text>
+              <Text>{item.preco}</Text>
+              <Text>{item.tipo}</Text>
+            </View>
           )} 
           keyExtractor={item => item.key}/>
         </View>
