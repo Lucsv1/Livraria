@@ -108,7 +108,7 @@ export default function App() {
           ]}
           renderSectionFooter={({section})=>(
             <View>
-              <Text>{section.title}</Text>
+              <Text>{section.data}</Text>
               <Text>{section.title}</Text>
             </View>
             
