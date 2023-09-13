@@ -13,8 +13,14 @@ import {
 } from "react-native";
 import img from "./assets/floresta.png";
 import { useState } from "react";
+import axios from "axios";
+
+
+
 
 export default function App() {
+  const [id, setId] = useState(null);
+  const [filtro, setFiltro] = useState("")
   const [tituloAutor, setTituloAutor] = useState("");
   const [nomeAutor, setNomeAutor] = useState("");
   const [editora, setEditora] = useState("");
@@ -23,6 +29,56 @@ export default function App() {
   const [tipoTerro, setTipoTerror] = useState([]);
   const [tipoAventira, setTipoAventura] = useState([]);
   const [modal, setModal] = useState(false);
+  const [lista, setLista] = useState([])
+
+  const api = axios.create({
+    baseURL: "https://livraria-a5274-default-rtdb.firebaseio.com"
+  })
+
+  const salvar = () =>{
+    api.post("/Livraria.json", {nomeAutor})
+    .then((res)=>{
+      alert("nome do autor cadastrado!", res.data)
+    })
+    .catch((err) =>{
+      alert(err)
+    })
+
+  }
+
+  const deletar = () =>{
+    api.delete("/Livraria" + id)
+    .then((res)=>{
+      alert(res.data)
+    })
+    .catch((err)=>{
+     alert(err)
+    })
+  }
+
+  const alterar = () =>{
+    api.put("/Livraria" + id + nomeAutor)
+    .then((res)=>{
+      alert(res)
+    })
+    .catch((err)=>{
+      alert(err)
+    })
+
+  }
+
+  const mostrar = () =>{
+    fetch("https://loja-dos-soms-default-rtdb.firebaseio.com/", {
+      method: "POST",
+      body: JSON.stringify(nomeAutor)
+    })
+    .then((res)=>{
+      alert(res)
+    })
+    .catch((err) => {
+      alert(err)
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -103,18 +159,18 @@ export default function App() {
             />
             <View style={{ backgroundColor: "brown", width: "49%" }}>
               <Text
-                onPress={() => {
-                  const obj = { tituloAutor, nomeAutor, editora, preco, tipo };
-                  if (tipo == "1") {
-                    setTipoTerror([...tipoTerro, obj]);
-                  } else {
-                    setTipoAventura([...tipoAventira, obj]);
-                  }
-                }}
+                onPress={salvar}
                 style={{ textAlign: "center" }}
               >
                 Salvar
               </Text>
+              <View style={{ backgroundColor: "brown", width: "49%" }}>
+                <Text style={{textAlign: 'center'}}>ver livros</Text>
+              </View>
+              <View style={{ backgroundColor: "brown", width: "49%" }}>
+                <Text style={{textAlign: 'center'}}>atualizar</Text>
+              </View>
+              
             </View>
           </View>
         </View>
